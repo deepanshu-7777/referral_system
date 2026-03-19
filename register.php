@@ -1,14 +1,8 @@
-<?php include "db.php"; ?>
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Referral Registration</title>
-    <link rel="stylesheet" href="style_new.css">
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
-</head>
+<?php
+header("Location: login.php");
+exit();
+?>
+
 <body>
     <div class="center-container">
         <div class="form-card">
@@ -34,7 +28,7 @@
                     <input type="tel" name="mobile" required placeholder="10 digit mobile number">
                 </div>
 
-                <div class="input-group">
+                <!-- <div class="input-group">
                     <label><i class="fas fa-share-alt"></i> Referral Code (Optional)</label>
                     <input type="text" name="ref_code" placeholder="Enter referral code if you have one">
                 </div>
@@ -48,7 +42,7 @@
                         <option value="Colleague">Colleague</option>
                         <option value="Other">Other</option>
                     </select>
-                </div>
+                </div> -->
 
                 <button type="submit" class="btn">
                     <i class="fas fa-paper-plane"></i> Register Now

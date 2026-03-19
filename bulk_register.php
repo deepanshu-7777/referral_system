@@ -1,46 +1,52 @@
+<?php session_start(); 
+if (!isset($_SESSION['existing_user_client_id'])) {
+    header("Location: login.php?error=Please login as existing user first");
+    exit();
+}
+include "db.php";
+
+// Fetch current user info
+$client_id = $_SESSION['existing_user_client_id'];
+$user_query = $conn->prepare("SELECT name FROM existing_users WHERE client_id = ?");
+$user_query->bind_param("s", $client_id);
+$user_query->execute();
+$current_user = $user_query->get_result()->fetch_assoc();
+?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Bulk Registration</title>
+    <title>Bulk Referral - <?php echo htmlspecialchars($current_user['name'] ?? 'User'); ?></title>
 <link rel="stylesheet" href="style_new.css">
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
-        /* .upload-area {
-            border: 3px dashed #4299e1;
-            border-radius: 16px;
-            padding: 40px;
-            text-align: center;
-            background: rgba(66, 153, 225, 0.05);
-            transition: all 0.3s ease;
-            margin: 30px 0;
-            cursor: pointer;
-        }
-        .upload-area:hover, .upload-area.dragover {
-            border-color: #3182ce;
-            background: rgba(66, 153, 225, 0.1);
-            transform: translateY(-2px);
-        }
-        .csv-preview {
-            max-height: 300px;
-            overflow: auto;
-            margin: 20px 0;
-        }
-        .csv-preview table {
-            width: 100%;
-            border-collapse: collapse;
-        }
-        .csv-preview th {
+        .user-info {
             background: linear-gradient(135deg, #4299e1 0%, #3182ce 100%);
             color: white;
-            padding: 12px;
+            padding: 20px;
+            border-radius: 12px;
+            margin-bottom: 25px;
+            text-align: center;
         }
-        .csv-preview td {
-            padding: 10px;
-            border-bottom: 1px solid #e2e8f0;
-        } */
+        .user-info h3 { margin: 0 0 5px 0; font-size: 24px; }
+        .user-info p { margin: 0; opacity: 0.9; }
+        .logout-btn { 
+            background: rgba(255,255,255,0.2); 
+            color: white; 
+            border: 1px solid rgba(255,255,255,0.3); 
+            padding: 8px 16px; 
+            border-radius: 8px; 
+            text-decoration: none; 
+            font-size: 14px; 
+            transition: all 0.3s; 
+            display: inline-block; 
+            margin-top: 10px;
+        }
+        .logout-btn:hover { background: rgba(255,255,255,0.3); }
+        .ref-code-display { font-weight: 600; color: #48bb78; }
+        /* .upload-area { ... } existing styles */
         .progress-bar {
             width: 100%;
             height: 8px;
@@ -58,38 +64,20 @@
         #csvFile { display: none; }
     </style>
     <style>
-        /* Ensure the bulk registration row stays aligned even if external CSS is cached */
         .user-row {
             display: flex;
             flex-wrap: wrap;
             gap: 10px;
             align-items: center;
         }
-
-        .user-row input,
-        .user-row select {
-            flex: 1 1 170px;
-            min-width: 140px;
-        }
-
+        .user-row input, .user-row select { flex: 1 1 170px; min-width: 140px; }
         .remove-row {
-            flex: 0 0 auto;
-            background: transparent;
-            border: 1px solid rgba(0,0,0,0.12);
-            border-radius: 8px;
-            width: 38px;
-            height: 38px;
-            font-size: 18px;
-            cursor: pointer;
-            color: #b30000;
-            display: flex;
-            align-items: center;
-            justify-content: center;
+            flex: 0 0 auto; background: transparent; border: 1px solid rgba(0,0,0,0.12);
+            border-radius: 8px; width: 38px; height: 38px; font-size: 18px; cursor: pointer;
+            color: #b30000; display: flex; align-items: center; justify-content: center;
         }
-
-        .remove-row:hover {
-            background: rgba(179, 0, 0, 0.12);
-        }
+        .remove-row:hover { background: rgba(179, 0, 0, 0.12); }
+        .button-row { display: flex; gap: 15px; justify-content: center; margin-top: 25px; flex-wrap: wrap; }
     </style>
 </head>
 <body>
@@ -97,14 +85,20 @@
 <div class="container">
     <div class="form-card">
 
-<h2>Bulk Registration</h2>
+<h2>Registration</h2>
 
 <form method="POST" action="save_bulk.php">
 
-    <!-- Common Fields -->
-    <div class="input-group">
-        <label>Referral Code (Optional)</label>
-        <input type="text" name="ref_code">
+    <!-- Hidden Referral Code - Auto-filled -->
+    <input type="hidden" name="ref_code" value="<?php echo htmlspecialchars($client_id); ?>">
+    
+    <!-- Current User Info -->
+    <div class="user-info">
+        <h3><i class="fas fa-user-check"></i> Welcome, <?php echo htmlspecialchars($current_user['name'] ?? 'User'); ?>!</h3>
+        <p>Your Referral ID: <span class="ref-code-display"><?php echo htmlspecialchars($client_id); ?></span></p>
+        <a href="logout.php" class="logout-btn" onclick="return confirm('Logout and return to login?')">
+            <i class="fas fa-sign-out-alt"></i> Logout
+        </a>
     </div>
 
     <hr>
@@ -145,7 +139,10 @@
     </div>
     <div class="button-row">
         <button type="button" class="secondary" onclick="addRow()">+ Add More</button>
-        <button type="submit" class="btn">Submit All</button>
+        <!-- <a href="login.php" class="secondary" style="padding: 12px 24px; display: inline-flex; align-items: center;">
+            <i class="fas fa-arrow-left"></i> Back to Login
+        </a> -->
+        <button type="submit" class="btn">Submit Referrals</button>
     </div>
 
 </form>
