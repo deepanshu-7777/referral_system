@@ -3,13 +3,20 @@ body {
     margin: 0;
     font-family: 'Segoe UI', sans-serif;
     background: #f4f6f9;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
 }
 
 /* Container */
 .container {
-    width: 90%;
-    margin: auto;
-    padding: 20px;
+    width: 100%;
+    max-width: 920px;
+    margin: 0 auto;
+    padding: 25px 20px;
+    display: flex;
+    justify-content: center;
 }
 
 /* Card */
@@ -92,7 +99,8 @@ table tr:hover {
 .form-card {
     background: #ffffff;
     padding: 30px;
-    width: 350px;
+    max-width: 760px;
+    width: 100%;
     border-radius: 15px;
     box-shadow: 0 8px 25px rgba(0,0,0,0.15);
     text-align: center;
@@ -133,8 +141,8 @@ table tr:hover {
 
 /* Button */
 .btn {
-    width: 100%;
-    padding: 12px;
+    min-width: 160px;
+    padding: 12px 18px;
     background: linear-gradient(135deg, #007bff, #00c6ff);
     border: none;
     color: white;
@@ -147,9 +155,60 @@ table tr:hover {
 .btn:hover {
     opacity: 0.9;
 }
-select {
+
+/* Button row */
+.button-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+    justify-content: center;
+    margin-top: 18px;
+}
+
+button.secondary {
+    background: #e9ecef;
+    color: #0b1e29;
+    border: 1px solid #cdd4db;
+}
+
+button.secondary:hover {
+    background: #dcdfe3;
+}
+
+.input-group select,
+.user-row select {
     width: 100%;
     padding: 10px;
     border-radius: 8px;
     border: 1px solid #ccc;
+    background: white;
+}
+
+/* User row layout */
+.user-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    align-items: center;
+    margin-bottom: 12px;
+    background: #f9fbff;
+    padding: 10px;
+    border-radius: 10px;
+}
+
+/* Inputs/selects share consistent styling */
+.user-row input,
+.user-row select {
+    flex: 1 1 180px;
+    min-width: 160px;
+    padding: 10px;
+    border-radius: 8px;
+    border: 1px solid #ccc;
+}
+
+/* Optional: better look */
+.user-row {
+    background: #f9fbff;
+    padding: 10px;
+    border-radius: 10px;
 }
