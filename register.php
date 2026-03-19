@@ -28,6 +28,16 @@
                 <label>Referral Code (Optional)</label>
                 <input type="text" name="ref_code">
             </div>
+            <div class="input-group">
+        <label>Relation </label>
+    <select name="relation" required>
+        <option value="">Select Relation</option>
+        <option value="Friend">Friend</option>
+        <option value="Family">Family</option>
+        <option value="Colleague">Colleague</option>
+        <option value="Other">Other</option>
+    </select>
+</div>
 
             <button type="submit" class="btn">Register</button>
 

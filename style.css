@@ -117,7 +117,7 @@ table tr:hover {
 }
 
 .input-group input {
-    width: 100%;
+    width: 100%; 
     padding: 10px;
     border-radius: 8px;
     border: 1px solid #ccc;
@@ -146,4 +146,10 @@ table tr:hover {
 
 .btn:hover {
     opacity: 0.9;
+}
+select {
+    width: 100%;
+    padding: 10px;
+    border-radius: 8px;
+    border: 1px solid #ccc;
 }

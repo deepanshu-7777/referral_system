@@ -17,6 +17,7 @@ $res = $conn->query("SELECT * FROM new_users");
 <th>Email</th>
 <th>Mobile</th>
 <th>Referred By</th>
+<th>Relation</th>
 </tr>
 
 <?php while($row = $res->fetch_assoc()){ ?>
@@ -25,6 +26,7 @@ $res = $conn->query("SELECT * FROM new_users");
 <td><?php echo $row['email']; ?></td>
 <td><?php echo $row['mobile']; ?></td>
 <td><?php echo $row['referred_by']; ?></td>
+<td><?php echo $row['relation']; ?></td>
 </tr>
 <?php } ?>
 

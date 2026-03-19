@@ -5,6 +5,7 @@ $name = $_POST['name'];
 $email = $_POST['email'];
 $mobile = $_POST['mobile'];
 $ref_code = $_POST['ref_code'];
+$relation = $_POST['relation'];
 
 // 1. required fields check (referral optional)
 if(empty($name) || empty($email) || empty($mobile)){
@@ -22,6 +23,7 @@ if($checkUser->num_rows > 0){
 // 3. referral logic
 $referred_by = NULL;
 
+// agar referral code diya hai
 if(!empty($ref_code)){
 
     $check = $conn->query("SELECT * FROM existing_users WHERE client_id='$ref_code'");
@@ -40,8 +42,8 @@ if(!empty($ref_code)){
 }
 
 // 4. insert new user
-$conn->query("INSERT INTO new_users (name,email,mobile,referred_by)
-VALUES ('$name','$email','$mobile','$referred_by')");
+$conn->query("INSERT INTO new_users (name,email,mobile,referred_by,relation)
+VALUES ('$name','$email','$mobile','$referred_by','$relation')");
 
 echo "Registration Successful!";
 ?>
